@@ -50,19 +50,32 @@ test_dir = "tiny-imagenet-200/test"
 # Use glob to find all images in the train, validation, and test sets
 train_images = glob.glob("{}/*/*.JPEG".format(train_dir))
 val_images = glob.glob("{}/*/*.JPEG".format(val_dir))
-test_images = glob.glob("{}/*.JPEG".format(test_dir))
+test_images = glob.glob("{}/*/*.JPEG".format(test_dir))
 
 # Load the images into memory
 train_imgs = [cv2.imread(img) for img in train_images]
 val_imgs = [cv2.imread(img) for img in val_images]
 test_imgs = [cv2.imread(img) for img in test_images]
 
-# Store the images in a list or array for easy access
-train_data = np.array(train_imgs)
-val_data = np.array(val_imgs)
-test_data = np.array(test_imgs)
+print("num of train images", len(train_imgs))
+print("num of val images", len(val_imgs))
+print("num of test images", len(test_imgs))
 
-print(len(train_imgs))
+
+# Read the labels from the words.txt file
+with open("tiny-imagenet-200/words.txt") as f:
+    contents = f.read()
+    #print(contents)
+    labels = {line.split("\t")[0]: line.split("\t")[1] for line in contents}
+
+# Store the images and labels in a list or array
+train_data = [(img, labels[img.split("/")[-1]]) for img in train_imgs]
+val_data = [(img, labels[img.split("/")[-1]]) for img in val_imgs]
+test_data = [(img, labels[img.split("/")[-1]]) for img in test_imgs]
+
+
+
+
 
 
 
