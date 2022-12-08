@@ -1,24 +1,16 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import tensorflow.keras
-from keras.datasets import mnist
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.optimizers import Adam
-from keras.utils.np_utils import to_categorical
-import random
-import requests
-from PIL import Image
 import cv2
+import keras
+from tensorflow import keras
+from keras.layers import Dense
+from keras.models import Sequential
+from keras.optimizers import Adam
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.layers import Flatten
 from keras.layers import Dropout
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Model
-import pickle
-import pandas as pd
-import cv2
+import glob
+import numpy as np
+
 
 def gray_scale(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -34,7 +26,7 @@ def preprocess(img):
     img = gray_scale(img)
     img = equalise(img)
     img = img/255
-    return
+    return img
 
 
 #def le_net_model():
@@ -50,32 +42,29 @@ def preprocess(img):
 #    model.compile(Adam(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
 #    return model
 
-#open words.txt
-with open('tiny-imagenet-200/words.txt') as f:
-    for line in f:
-        print(line.strip())
+# Set the directories for the train, validation, and test sets
+train_dir = "tiny-imagenet-200/train"
+val_dir = "tiny-imagenet-200/val"
+test_dir = "tiny-imagenet-200/test"
+
+# Use glob to find all images in the train, validation, and test sets
+train_images = glob.glob("{}/*/*.JPEG".format(train_dir))
+val_images = glob.glob("{}/*/*.JPEG".format(val_dir))
+test_images = glob.glob("{}/*.JPEG".format(test_dir))
+
+# Load the images into memory
+train_imgs = [cv2.imread(img) for img in train_images]
+val_imgs = [cv2.imread(img) for img in val_images]
+test_imgs = [cv2.imread(img) for img in test_images]
+
+# Store the images in a list or array for easy access
+train_data = np.array(train_imgs)
+val_data = np.array(val_imgs)
+test_data = np.array(test_imgs)
+
+print(len(train_imgs))
 
 
-# open and get images
-test_data = []
-train_data = []
-val_data = []
 
 
-
-
-
-# xtrain, xtest, xval + labels
-#X_train, y_train = train_data['features'], train_data['labels']
-# X_val, y_val = val_data['features'], val_data['labels']
-# X_test, y_test = test_data['features'], test_data['labels']
-
-# assert xtrain, xtest, xval
-
-
-
-
-# one hot encode labels
-
-# score
 
